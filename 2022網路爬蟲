@@ -1,0 +1,39 @@
+import requests
+import openpyxl
+from bs4 import BeautifulSoup
+
+url = 'https://www.taiwanlottery.com.tw/lotto/superlotto638/history.aspx'
+
+
+headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'}
+
+resp = requests.get(url, headers=headers)
+
+resp.encoding = 'utf-8'
+
+soup = BeautifulSoup(resp.text, "html.parser")
+
+workbook = openpyxl.Workbook()
+excel = workbook.worksheets[0]
+
+for index in range(0, 5):
+    month = soup.select(f'#SuperLotto638Control_history1_dlQuery_DrawTerm_{index}')[0].text
+    excel[f'A{index+1}'] =month
+    num_A = soup.select(f'#SuperLotto638Control_history1_dlQuery_SNo1_{index}')[0].text
+    excel[f'B{index+1}'] =num_A
+    num_B = soup.select(f'#SuperLotto638Control_history1_dlQuery_SNo2_{index}')[0].text
+    excel[f'C{index+1}'] =num_B
+    num_C = soup.select(f'#SuperLotto638Control_history1_dlQuery_SNo3_{index}')[0].text
+    excel[f'D{index+1}'] =num_C
+    num_D = soup.select(f'#SuperLotto638Control_history1_dlQuery_SNo4_{index}')[0].text
+    excel[f'E{index+1}'] =num_D
+    num_E = soup.select(f'#SuperLotto638Control_history1_dlQuery_SNo5_{index}')[0].text
+    excel[f'F{index+1}'] =num_E
+    num_F = soup.select(f'#SuperLotto638Control_history1_dlQuery_SNo6_{index}')[0].text
+    excel[f'G{index+1}'] =num_F
+    num_G = soup.select(f'#SuperLotto638Control_history1_dlQuery_SNo7_{index}')[0].text
+    excel[f'H{index+1}'] =num_G
+    print(month +'期中獎號碼'+ num_A +','+ num_B+',' + num_C+',' + num_D+',' + num_E +','+ num_F +','+ num_G)
+    print('')
+workbook.save(r'D:\資料倉儲\威力彩爬蟲.xlsx')
+    
